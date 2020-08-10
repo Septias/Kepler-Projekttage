@@ -6,9 +6,19 @@
 
 <style lang="sass">
 #app
-  font-family: 'Baloo Tamma 2', cursive
+  font-family: 'Lato', sans-serif
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
-  color: #2c3e50
+  font-size: .9em
+
+body
+  margin: 0px
+
+:root
+  --color1: #D79922
+  --color2: #EFE2BA
+  --color3: #4056A1
+  --color4: #537EFF
+  --color5: #6A88FF
 
 </style>
