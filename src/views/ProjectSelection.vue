@@ -5,11 +5,11 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
+import useUser from '@/compositions/useUsers'
 
 export default defineComponent({
-  setup () {
-    const test = ref('ja')
-    return { test }
+  async setup () {
+    const users = await useUser()
   }
 })
 
