@@ -1,5 +1,5 @@
 <template>
-  <div class="flex align-center justify-center h-100">
+  <div id="wrapper" class="flex align-center justify-center h-100">
     <div id="create-project">
       <h1> Erstelle ein Projekt</h1>
       <form id="create-project-form">
@@ -19,7 +19,7 @@
   padding: 1em
   margin-bottom: 1em
   border: 0
-  background: var(--color5)
+  background: var(--color1)
   border-radius: .8em
   color: inherit
 
@@ -28,13 +28,16 @@
     border-radius: $md
     margin: 2em
 
+#wrapper
+  background: var(--color2)
+
 #create-project
   width: 100%
   color: #F7F7F7F2
   box-sizing: border-box
   padding: 1.5em
   max-width: 800px
-  background: var(--color4)
+  background: var(--color2)
   form
     display: flex
     flex-direction: column

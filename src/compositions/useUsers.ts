@@ -1,14 +1,15 @@
 import { ref } from 'vue'
 import firebase from 'firebase/app'
+import '../compositions/firebaseApp'
 import 'firebase/auth'
-import { db } from './firebaseApp'
+import 'firebase/firestore'
 
+const db = firebase.firestore()
 const selectedProjects = ref([])
 
 firebase.auth().onAuthStateChanged(function (user: any) {
   if (user) {
-    console.log(user)
-    db.collection('entries').doc(user.uid).get().then(function (doc: any) {
+    db.collection('users').doc(user.uid).get().then(function (doc: any) {
       if (doc.exists) {
         selectedProjects.value = doc.data().selectedProjects
       } else {
@@ -16,6 +17,7 @@ firebase.auth().onAuthStateChanged(function (user: any) {
       }
     })
   } else {
+    console.log('no User')
     selectedProjects.value = []
   }
 })

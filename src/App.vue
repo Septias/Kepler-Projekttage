@@ -11,14 +11,19 @@
   -moz-osx-font-smoothing: grayscale
   font-size: .9em
 
+@media screen and (max-width: 600px)
+  #app
+    font-size: 2.1vw
+
 body
   margin: 0px
 
 :root
-  --color1: #D79922
-  --color2: #EFE2BA
-  --color3: #4056A1
-  --color4: #537EFF
-  --color5: #6A88FF
+  --color1: #182237
+  --color2-lighten: #0f1522
+  --color2: #0f1522
+  --color3: #fff
+  --color4: #C82F2F
+  --color5: #FFF
 
 </style>
