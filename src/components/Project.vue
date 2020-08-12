@@ -1,5 +1,5 @@
 <template>
-  <div class="project">
+  <div class="project" :class="{selected: selected}">
     <div class="header">
       <div class="headlines">
         <h1>
@@ -10,8 +10,11 @@
       </div>
       <div class="icon"><button @click="expanded = !expanded"><i class="material-icons">{{expanded ? 'expand_less' : 'expand_more'}}</i></button></div>
     </div>
-    <div class="hr"></div>
-    <div class="text" :class="expanded ? 'expanded' : null " v-html="project.description"></div>
+
+    <div class="text" ref="description" :style="maxHeight">
+       <div class="hr"></div>
+       <div v-html="project.description"></div>
+    </div>
   </div>
 
 </template>
@@ -25,10 +28,7 @@
 .text
   max-height: 0
   overflow: hidden
-  transition: max-height 0.2s ease-out
-
-.text.expanded
-  max-height: 200px
+  transition: max-height .2s ease
 
 .project
   max-width: 55em
@@ -38,6 +38,9 @@
   border-radius: 1em
   background: var(--color1)
   cursor: pointer
+
+  &.selected
+    border: 3px solid var(--color4)
 
   box-sizing: border-box
   .header
@@ -76,7 +79,16 @@ import { Project } from '@/compositions/useProjects'
 
 export default defineComponent({
   props: {
-    project: (Object as unknown) as PropType<Project>
+    project: (Object as unknown) as PropType<Project>,
+    selected: Boolean
+  },
+  computed: {
+    maxHeight () {
+      if (this.expanded) {
+        return { 'max-height': this.$refs.description.scrollHeight + 'px' }
+      }
+      return { 'max-height': '0px' }
+    }
   },
   setup () {
     const expanded = ref(false)

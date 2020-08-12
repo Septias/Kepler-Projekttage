@@ -9,18 +9,24 @@
 .project-cart-item
   display: flex
   margin: 1em
+  cursor: pointer
   .number
+
+    box-sizing: border-box
     border-radius: .3em 0px 0px .3em
     text-align: center
     padding: .6em
     background: var(--color4)
+    h2
+      margin: 0
 
   .caption
-    min-width: 250px
+    width: 100%
     text-align: center
-    width: 150px
     background: var(--color2)
     border-radius: 0px .3em .3em 0px
+    h3
+      margin: .3em
 
 @media screen and (max-width: 600px)
   .caption

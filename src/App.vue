@@ -9,11 +9,7 @@
   font-family: 'Lato', sans-serif
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
-  font-size: .9em
-
-@media screen and (max-width: 600px)
-  #app
-    font-size: 2.1vw
+  font-size: clamp(8px, 2.1vw, .9em)
 
 body
   margin: 0px

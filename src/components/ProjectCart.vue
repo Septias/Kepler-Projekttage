@@ -9,6 +9,7 @@
 #project-cart
   height: 100vh
   background: var(--color1)
+  width: 30vw
 </style>
 
 <script lang="ts">
@@ -27,7 +28,6 @@ export default defineComponent({
     const { projects } = useProjects()
 
     const selectedProjects = computed(() => {
-      console.log(props.projects)
       if (props.projects) {
         return props.projects.map(projectId => projects.value.find(project => projectId === project.id))
       }
