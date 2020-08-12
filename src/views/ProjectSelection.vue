@@ -3,7 +3,14 @@
   <main>
     <div id="projects-wrapper">
       <h1>Projektwahl</h1>
-      <Project v-for="project in projects" :key="project.caption" :selected="selectedProjects.includes(project.id)" :project="project"></Project>
+      <Project
+      v-for="project in projects"
+      :key="project.caption"
+      :selected="selectedProjects.includes(project.id)"
+      :project="project"
+      @click="() => {toggleProject(project.id)}"
+      >
+      </Project>
     </div>
     <ProjectCart :projects="selectedProjects"></ProjectCart>
   </main>
@@ -43,10 +50,10 @@ export default defineComponent({
     ProjectCart
   },
   setup () {
-    const { selectedProjects } = useUser()
+    const { selectedProjects, toggleProject } = useUser()
     const { projects } = useProjects()
 
-    return { selectedProjects, projects }
+    return { selectedProjects, toggleProject, projects }
   }
 })
 

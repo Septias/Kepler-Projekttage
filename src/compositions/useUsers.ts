@@ -5,7 +5,7 @@ import 'firebase/auth'
 import 'firebase/firestore'
 
 const db = firebase.firestore()
-const selectedProjects = ref([])
+const selectedProjects = ref<Array<string>>([])
 
 firebase.auth().onAuthStateChanged(function (user: any) {
   if (user) {
@@ -22,6 +22,16 @@ firebase.auth().onAuthStateChanged(function (user: any) {
   }
 })
 
+function toggleProject (projectId: string) {
+  // I should maybe chec if it is an existing projectId
+  const index = selectedProjects.value.indexOf(projectId)
+  if (index > -1) {
+    selectedProjects.value.splice(index, 1)
+  } else {
+    selectedProjects.value.push(projectId)
+  }
+}
+
 export default function () {
-  return { selectedProjects }
+  return { selectedProjects, toggleProject }
 }
