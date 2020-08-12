@@ -8,8 +8,8 @@
 <style lang="sass">
 .project-cart-item
   display: flex
-  margin: 1em
   cursor: pointer
+  margin-bottom: 1em
   .number
     flex-grow: 1
     box-sizing: border-box
@@ -34,17 +34,26 @@
     max-width: 0px
   .number
     border-radius: .3em !important
-    width: 15vw
-    height: 15vw
+    width: 10vw
+  .project-cart-item
+    height: 10vw
 </style>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
+import useProjects from '@/compositions/useProjects'
 
 export default defineComponent({
   props: {
     index: Number,
-    caption: String
+    projectId: String
+  },
+  setup (props) {
+    const { projects } = useProjects()
+    const caption = computed(() => {
+      return projects.value.find(proj => proj.id === props.projectId).caption
+    })
+    return { caption }
   }
 })
 </script>

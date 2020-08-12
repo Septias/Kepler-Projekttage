@@ -1,7 +1,7 @@
 <template>
   <div class="project" :class="{selected: selected}">
     <div class="header">
-      <div class="headlines">
+      <div class="headlines" @click="$emit('toggle-project')">
         <h1>
           {{project.caption}}
         </h1>

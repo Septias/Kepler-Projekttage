@@ -32,6 +32,10 @@ function toggleProject (projectId: string) {
   }
 }
 
+function setProjects (projects: Array<string>) {
+  selectedProjects.value = projects
+}
+
 export default function () {
-  return { selectedProjects, toggleProject }
+  return { selectedProjects, toggleProject, setProjects }
 }

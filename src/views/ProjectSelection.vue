@@ -8,11 +8,11 @@
       :key="project.caption"
       :selected="selectedProjects.includes(project.id)"
       :project="project"
-      @click="() => {toggleProject(project.id)}"
+      @toggle-project="() => {toggleProject(project.id)}"
       >
       </Project>
     </div>
-    <ProjectCart :projects="selectedProjects"></ProjectCart>
+    <ProjectCart></ProjectCart>
   </main>
 
 </template>
@@ -50,10 +50,10 @@ export default defineComponent({
     ProjectCart
   },
   setup () {
-    const { selectedProjects, toggleProject } = useUser()
+    const { toggleProject, selectedProjects } = useUser()
     const { projects } = useProjects()
 
-    return { selectedProjects, toggleProject, projects }
+    return { toggleProject, selectedProjects, projects }
   }
 })
 
