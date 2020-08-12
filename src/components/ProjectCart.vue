@@ -5,8 +5,7 @@
       {{selectedProjects}}
     </div>
     <draggable id="project-cart" v-model="selectedProjects">
-      <!-- <ProjectCartItem v-for="(project, index) in selectedProjects" :key="project.id" :caption="project.caption" :index="index"></ProjectCartItem> -->
-      <div v-for="project in selectedProjects" :key="project.id">{{project.id}}</div>
+      <ProjectCartItem v-for="(project, index) in selectedProjects" :key="project.id" :caption="project.caption" :index="index"></ProjectCartItem>
     </draggable>
   </div>
 </template>
@@ -31,7 +30,8 @@ import draggable from 'vuedraggable'
 
 export default defineComponent({
   components: {
-    draggable
+    draggable,
+    ProjectCartItem
   },
   props: {
     projects: Array
