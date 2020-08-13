@@ -26,7 +26,7 @@
 </style>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import ProjectCartItem from '@/components/ProjectCartItem'
 import draggable from 'vuedraggable'
 import useUsers from '@/compositions/useUsers'

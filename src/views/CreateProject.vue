@@ -6,10 +6,10 @@
         <label >Projektname</label>
         <input type="text" v-model="formData.caption">
         <label>Kurzbeschreibung für das Projekt</label>
-        <textarea type="text" v-model="formData.tldr"></textarea>
+        <textarea v-model="formData.tldr"></textarea>
 
         <section class="form-group">
-          <h1>Teilnehmer</h1>
+          <h2>Teilnehmer</h2>
           <div class="form-input-line">
             <label>Von</label>
             <input type="number" min="0" max="40" v-model="formData.participantsMin">
@@ -19,7 +19,7 @@
         </section>
 
         <section class="form-group">
-          <h1>Klassenstufen</h1>
+          <h2>Klassenstufen</h2>
           <div class="form-input-line">
             <label>Von</label>
             <input type="number" min="5" max="12" v-model="formData.gradeMin">
@@ -29,15 +29,15 @@
         </section>
 
         <section class="form-group">
-          <h1>Zeiten</h1>
-          <h2>Tag 1</h2>
+          <h2>Zeiten</h2>
+          <h3>Tag 1</h3>
           <div class="form-input-line">
             <label>Von</label>
             <input type="time" v-model="formData.day1Start">
             <label>Bis</label>
             <input type="time" v-model="formData.day1End">
           </div>
-          <h2>Tag 2</h2>
+          <h3>Tag 2</h3>
           <div class="form-input-line">
             <label>Von</label>
             <input type="time" v-model="formData.day2Start">
@@ -47,17 +47,16 @@
         </section>
 
         <label>Bedarf für das Projekt</label>
-        <textarea type="text" v-model="formData.requirements"></textarea>
+        <textarea v-model="formData.requirements"></textarea>
         <label>Kosten pro Schüler</label>
         <input type="number" min="0" max="10" v-model="formData.costs">
         <label>Projektbeschreibung</label>
-        <div contenteditable="true" class="wy" type="text" @input="formData.description = $event.el.innerHTML"></div>
+        <div contenteditable="true" class="wy" type="text" @input="inputlul"></div>
         <div class="formbuttons">
           <button> Löschen </button>
           <button type="submit">Speichern</button>
         </div>
       </form>
-      {{formData}}
     </div>
   </div>
 </template>
@@ -74,7 +73,7 @@ export default defineComponent({
     const formData = reactive({
       caption: '',
       tldr: '',
-      description: '',
+      description: 'aaa',
       day1Start: '09:00',
       day1End: '13:00',
       day2Start: '09:00',
@@ -86,8 +85,11 @@ export default defineComponent({
       requirements: '',
       costs: '0'
     })
+    function inputlul (el) {
+      formData.description = el.target.innerHTML
+    }
 
-    return { formData, addProject }
+    return { formData, addProject, inputlul }
   }
 })
 
@@ -102,9 +104,12 @@ export default defineComponent({
   background: var(--color1)
   border-radius: .8em
   color: inherit
-  width: 100%
+  font-size: inherit
+  &:hover
+        background: var(--color1-lighten)
 
 #create-project
+  font-size: 1.3em
   width: 100%
   color: var(--color3)
   box-sizing: border-box
@@ -112,16 +117,18 @@ export default defineComponent({
   max-width: 800px
   background: var(--color2)
   form
+    :focus
+      border: 3px solid var(--color4)
     display: flex
     flex-direction: column
     input
+
       @extend %input-shared
     textarea
       @extend %input-shared
       resize: none
     label
       padding-bottom: 4px
-      font-size: 1.6em
       font-weight: 400
     button
       border: none
@@ -129,6 +136,9 @@ export default defineComponent({
       background: var(--color1)
       padding: 1em
       color: inherit
+      font-size: 1em
+      &:hover
+        background: var(--color1-lighten)
 
 .formbuttons
   display: flex
@@ -139,11 +149,13 @@ export default defineComponent({
   @extend %input-shared
 
 .form-group
+  margin: .5em 0
   .form-input-line
     display: flex
     align-items: baseline
     input
       min-width: 40px
+      flex-grow: 1
     label
       margin: 0 1em
 

@@ -16,7 +16,7 @@ body
 
 :root
   --color1: #182237
-  --color2-lighten: #0f1522
+  --color1-lighten: #1d2b46
   --color2: #0f1522
   --color3: #fff
   --color4: #C82F2F
