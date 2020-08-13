@@ -1,7 +1,7 @@
 
 <template>
-  <div @click="open = !open">
-    <draggable id="project-cart" :class="{open: open}" ref="projectcart" :list="selectedProjects">
+  <div ref="project-cart" @click="$refs['project-cart'].focus()">
+    <draggable id="project-cart" v-model="selectedProjects">
       <ProjectCartItem
       v-for="(projectid, index) in selectedProjects"
       :key="projectid"
@@ -38,8 +38,7 @@ export default defineComponent({
   },
   setup () {
     const { selectedProjects } = useUsers()
-    const open = ref(true)
-    return { selectedProjects, open }
+    return { selectedProjects }
   }
 })
 </script>

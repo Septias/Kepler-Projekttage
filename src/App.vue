@@ -22,4 +22,5 @@ body
   --color4: #C82F2F
   --color5: #FFF
 
+  background: var(--color2)
 </style>

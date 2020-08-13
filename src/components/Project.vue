@@ -1,17 +1,17 @@
 <template>
   <div class="project" :class="{selected: selected}">
     <div class="header">
-      <div class="headlines" @click="$emit('toggle-project')">
+      <div class="headlines" >
         <h1>
           {{project.caption}}
         </h1>
         <h3>{{project.tldr}}</h3>
 
       </div>
-      <div class="icon"><button @click="expanded = !expanded"><i class="material-icons">{{expanded ? 'expand_less' : 'expand_more'}}</i></button></div>
+      <div class="icon"><button @click.stop="expanded = !expanded"><i class="material-icons">{{expanded ? 'expand_less' : 'expand_more'}}</i></button></div>
     </div>
 
-    <div class="text" ref="description" :style="maxHeight">
+    <div class="description" ref="description" :style="maxHeight">
        <div class="hr"></div>
        <div v-html="project.description"></div>
     </div>
@@ -25,12 +25,14 @@
   border: 1px solid var(--color2)
   margin-bottom: 1em
 
-.text
+.description
   max-height: 0
   overflow: hidden
   transition: max-height .2s ease
 
 .project
+  background: inherit
+  color: inherit
   max-width: 55em
   width: 100%
   padding: 1em
@@ -38,18 +40,18 @@
   border-radius: 1em
   background: var(--color1)
   cursor: pointer
-
+  box-sizing: border-box
   &.selected
     border: 3px solid var(--color4)
 
-  box-sizing: border-box
   .header
     display: flex
     .headlines
+      text-align: left
+      border: 0
       width: 80%
       h1
         margin-top: 0px
-
     .icon
       display: flex
       justify-content: center
@@ -67,7 +69,6 @@
         border-radius: 50%
         &:hover
           background: var(--color2)
-
         i
           font-size: 3em
 

@@ -1,6 +1,6 @@
 <template>
   <div class="project-cart-item">
-      <div class="number"> <h2>{{index + 1}}.</h2> </div>
+      <button class="number"> <h2>{{index + 1}}.</h2> </button>
       <div class="caption"> <h3>{{caption}} </h3></div>
   </div>
 </template>
@@ -17,6 +17,8 @@
     text-align: center
     padding: .6em
     background: var(--color4)
+    border: 0
+    color: inherit
     h2
       margin: 0
 
@@ -30,8 +32,14 @@
       margin: .3em
 
 @media screen and (max-width: 600px)
-  .caption
-    max-width: 0px
+  #project-cart
+    &:not(:focus-within)
+    .caption
+      max-width: 0px
+    &:focus-within
+      position: absolute
+      right: 0px
+
   .number
     border-radius: .3em !important
     width: 10vw

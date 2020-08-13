@@ -8,7 +8,7 @@
       :key="project.caption"
       :selected="selectedProjects.includes(project.id)"
       :project="project"
-      @toggle-project="() => {toggleProject(project.id)}"
+      @click="() => {toggleProject(project.id)}"
       >
       </Project>
     </div>
@@ -24,10 +24,13 @@ main
   color: var(--color3)
   font-size: 1.2em
   #projects-wrapper
+    box-sizing: border-box
     display: flex
+    width: 100%
+    max-width: 80vw
     flex-direction: column
     align-items: center
-    flex-grow: 1
+
     background: var(--color2)
     padding: 1em
     padding-right: 2em
