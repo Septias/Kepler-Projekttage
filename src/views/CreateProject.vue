@@ -8,8 +8,8 @@
         <label>Kurzbeschreibung für das Projekt</label>
         <textarea v-model="formData.tldr"></textarea>
 
+        <label>Teilnehmer</label>
         <section class="form-group">
-          <h2>Teilnehmer</h2>
           <div class="form-input-line">
             <label>Von</label>
             <input type="number" min="0" max="40" v-model="formData.participantsMin">
@@ -18,8 +18,8 @@
           </div>
         </section>
 
+        <label>Klassenstufen</label>
         <section class="form-group">
-          <h2>Klassenstufen</h2>
           <div class="form-input-line">
             <label>Von</label>
             <input type="number" min="5" max="12" v-model="formData.gradeMin">
@@ -28,16 +28,16 @@
           </div>
         </section>
 
+        <label>Zeiten</label>
         <section class="form-group">
-          <h2>Zeiten</h2>
-          <h3>Tag 1</h3>
+          <label class="label-small">Tag 1</label>
           <div class="form-input-line">
             <label>Von</label>
             <input type="time" v-model="formData.day1Start">
             <label>Bis</label>
             <input type="time" v-model="formData.day1End">
           </div>
-          <h3>Tag 2</h3>
+          <label class="label-small">Tag 2</label>
           <div class="form-input-line">
             <label>Von</label>
             <input type="time" v-model="formData.day2Start">
@@ -104,12 +104,11 @@ export default defineComponent({
   background: var(--color1)
   border-radius: .8em
   color: inherit
-  font-size: inherit
   &:hover
         background: var(--color1-lighten)
 
 #create-project
-  font-size: 1.3em
+  font-size: 1.6em
   width: 100%
   color: var(--color3)
   box-sizing: border-box
@@ -122,23 +121,24 @@ export default defineComponent({
     display: flex
     flex-direction: column
     input
-
       @extend %input-shared
     textarea
       @extend %input-shared
       resize: none
     label
-      padding-bottom: 4px
       font-weight: 400
+      margin-bottom: .2em
     button
       border: none
       border-radius: 1em
       background: var(--color1)
       padding: 1em
       color: inherit
-      font-size: 1em
+      font-size: .8em
       &:hover
         background: var(--color1-lighten)
+    h3
+      font-size: .8em
 
 .formbuttons
   display: flex
@@ -149,15 +149,21 @@ export default defineComponent({
   @extend %input-shared
 
 .form-group
-  margin: .5em 0
-  .form-input-line
-    display: flex
-    align-items: baseline
-    input
-      min-width: 40px
-      flex-grow: 1
-    label
-      margin: 0 1em
+  margin: .5em 0px
+
+.form-input-line
+  display: flex
+  align-items: baseline
+  input
+    min-width: 40px
+    flex-grow: 1
+  label
+    font-size: .7em
+    margin: 0 1em
+
+.label-small
+  font-size: .8em
+  display: block
 
 @media screen and (min-width: 800px)
   #create-project
