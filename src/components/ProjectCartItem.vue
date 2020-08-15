@@ -10,6 +10,7 @@
   display: flex
   cursor: pointer
   margin-bottom: 1em
+  justify-content: baseline
   .number
     flex-grow: 1
     box-sizing: border-box
@@ -28,17 +29,18 @@
     background: var(--color2)
     border-radius: 0px .3em .3em 0px
     overflow: hidden
+    transition: max-width .5s ease
     h3
       margin: .3em
 
 @media screen and (max-width: 600px)
-  #project-cart
-    &:not(:focus-within)
+  #project-cart:not(:focus-within)
     .caption
-      max-width: 0px
-    &:focus-within
+      max-width: 0px !important
+
+  #project-cart:focus-within
       position: absolute
-      right: 0px
+      right: 0
 
   .number
     border-radius: .3em !important
@@ -59,6 +61,7 @@ export default defineComponent({
   setup (props) {
     const { projects } = useProjects()
     const caption = computed(() => {
+      console.log(props.projectId)
       return projects.value.find(proj => proj.id === props.projectId).caption
     })
     return { caption }

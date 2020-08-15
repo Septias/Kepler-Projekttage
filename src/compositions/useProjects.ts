@@ -38,6 +38,10 @@ const postConverter = {
   }
 }
 
+function createProject (data: any) {
+  db.collection('projects').doc(String(Date.now())).set(data)
+}
+
 let loaded = false
 
 export default function () {
@@ -49,5 +53,5 @@ export default function () {
     })
     loaded = true
   }
-  return { projects }
+  return { projects, createProject }
 }

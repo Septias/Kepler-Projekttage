@@ -23,6 +23,7 @@ main
   display: flex
   color: var(--color3)
   font-size: 1.2em
+  min-height: 100vh
   #projects-wrapper
     box-sizing: border-box
     display: flex

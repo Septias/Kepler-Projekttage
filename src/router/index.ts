@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import ProjectSelection from '../views/ProjectSelection.vue'
+import ProjectAssignment from '../views/ProjectAssignment.vue'
 import CreateProject from '../views/CreateProject.vue'
 import Login from '../views/Login.vue'
 import firebase from 'firebase/app'
@@ -19,6 +20,10 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       requiresAuth: true
     }
+  },
+  {
+    path: '/assign-projects',
+    component: ProjectAssignment
   },
   {
     path: '/login',

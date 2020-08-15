@@ -2,7 +2,7 @@
   <div id="wrapper" class="flex align-center justify-center">
     <div id="create-project">
       <h1> Erstelle ein Projekt</h1>
-      <form id="create-project-form" @submit.prevent="addProject">
+      <form id="create-project-form" @submit.prevent="() => {createProject(formData)}">
         <label >Projektname</label>
         <input type="text" v-model="formData.caption">
         <label>Kurzbeschreibung für das Projekt</label>
@@ -63,25 +63,24 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
+import useProjects from '@/compositions/useProjects'
 
 export default defineComponent({
   setup () {
-    function addProject () {
-      console.log('ok')
-    }
+    const { createProject } = useProjects()
 
     const formData = reactive({
       caption: '',
       tldr: '',
-      description: 'aaa',
+      description: '',
       day1Start: '09:00',
       day1End: '13:00',
       day2Start: '09:00',
       day2End: '13:00',
-      participantsMin: '5',
-      participantsMax: '10',
-      gradeMin: '5',
-      gradeMax: '12',
+      participantsMin: 5,
+      participantsMax: 10,
+      gradeMin: 5,
+      gradeMax: 12,
       requirements: '',
       costs: '0'
     })
@@ -89,7 +88,7 @@ export default defineComponent({
       formData.description = el.target.innerHTML
     }
 
-    return { formData, addProject, inputlul }
+    return { formData, createProject, inputlul }
   }
 })
 
