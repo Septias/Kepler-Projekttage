@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <suspense>
+      <router-view></router-view>
+    </suspense>
+
   </div>
 </template>
 
@@ -14,6 +17,9 @@
 body
   margin: 0px
   color: white
+
+*
+  box-sizing: border-box
 
 .interactive-color1
   background: var(--color1)

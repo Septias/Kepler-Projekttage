@@ -14,11 +14,13 @@ export class Project {
   public caption: string
   public tldr: string
   public description: string
-  constructor (caption: string, tldr: string, description: string, id: string) {
+  public assignedUsers: Array<string>
+  constructor (caption: string, tldr: string, description: string, id: string, assignedUsers: Array<string>) {
     this.caption = caption
     this.tldr = tldr
     this.description = description
     this.id = id
+    this.assignedUsers = assignedUsers
   }
 }
 
@@ -34,7 +36,7 @@ const postConverter = {
   },
   fromFirestore: function (snapshot: QueryDocumentSnapshot, options: firebase.firestore.SnapshotOptions) {
     const data = snapshot.data(options)
-    return new Project(data.caption, data.tldr, data.description, snapshot.id)
+    return new Project(data.caption, data.tldr, data.description, snapshot.id, data.assignedUsers)
   }
 }
 

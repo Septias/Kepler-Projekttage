@@ -17,7 +17,7 @@
 
 </template>
 
-<style lang="sass">
+<style lang="sass" scoped>
 
 main
   display: flex
@@ -43,7 +43,7 @@ main
 
 <script>
 import { defineComponent } from 'vue'
-import useUser from '@/compositions/useUsers'
+import useUser from '@/compositions/useUser'
 import useProjects from '@/compositions/useProjects'
 import Project from '@/components/Project'
 import ProjectCart from '@/components/ProjectCart'

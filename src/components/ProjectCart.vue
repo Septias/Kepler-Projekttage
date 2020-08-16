@@ -56,7 +56,7 @@
 import { defineComponent } from 'vue'
 import ProjectCartItem from '@/components/ProjectCartItem'
 import draggable from 'vuedraggable'
-import useUsers from '@/compositions/useUsers'
+import useUser from '@/compositions/useUser'
 
 export default defineComponent({
   components: {
@@ -64,7 +64,7 @@ export default defineComponent({
     ProjectCartItem
   },
   setup () {
-    const { selectedProjects } = useUsers()
+    const { selectedProjects } = useUser()
     return { selectedProjects }
   }
 })
