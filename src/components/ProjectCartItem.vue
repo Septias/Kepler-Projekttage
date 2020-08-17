@@ -61,8 +61,10 @@ export default defineComponent({
   setup (props) {
     const { projects } = useProjects()
     const caption = computed(() => {
-      console.log(props.projectId)
-      return projects.value.find(proj => proj.id === props.projectId).caption
+      const obj = projects.value.find(proj => proj.id === props.projectId)
+      if (obj) {
+        return obj.caption
+      } else { throw new Error('Project not found: ' + props.projectId) }
     })
     return { caption }
   }

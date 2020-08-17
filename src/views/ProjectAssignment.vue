@@ -11,8 +11,8 @@
     </div>
     <div id="user-cart-wrapper">
       <h2>Offene Nutzer</h2>
-      <draggable class="user-cart" v-for="user in openUsers" :key="user" v-model="openUsers" group="users">
-        <User :user-id="user"></User>
+      <draggable class="user-cart" group="users">
+        <User v-for="user in openUsers" :key="user" :user-id="user"></User>
       </draggable>
     </div>
   </main>
@@ -75,7 +75,7 @@ export default defineComponent({
     const { users } = await useUsers()
 
     const openUsers = computed(() => {
-      const unassignedUser = users.value.map((user) => user.uid)
+      const unassignedUser = [...users.value]
       for (const project of projects.value) {
         for (const user of project.assignedUsers) {
           const index = unassignedUser.indexOf(user)

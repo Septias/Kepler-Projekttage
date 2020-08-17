@@ -11,7 +11,7 @@ export default function () {
   if (!loaded) {
     db.collection('users').get().then(function (querySnapshot: firebase.firestore.QuerySnapshot) {
       querySnapshot.forEach(function (doc) {
-        users.value.push(doc.data() as unknown as string)
+        users.value.push(doc.data().uid as unknown as string)
       })
     })
     loaded = true

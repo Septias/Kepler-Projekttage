@@ -1,12 +1,12 @@
 
 <template>
-  <div class="project-user-cart ">
+  <div class="project-user-cart">
     <h3>{{project.caption}}</h3>
-    <div>
-      <draggable v-for="user in project.assignedUsers" group="users" :key="user" v-model="users">
-        <User :user-id="user"></User>
-      </draggable>
-    </div>
+
+    <draggable group="users">
+      <User v-for="user in project.assignedUsers" :key="user" :user-id="user"></User>
+    </draggable>
+
   </div>
 </template>
 
@@ -20,10 +20,11 @@
   box-sizing: border-box
   flex-grow: 1
 
-  div
+  >div
     border: 1px dashed gray
     border-radius: 1em
     min-height: 120px
+    padding: 1em
   h3
     border-bottom: 1px solid var(--color4)
 </style>

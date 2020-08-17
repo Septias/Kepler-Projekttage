@@ -1,30 +1,62 @@
 
 <template>
   <div id="project-cart">
-    <draggable v-if="selectedProjects.length > 0" v-model="selectedProjects">
-      <ProjectCartItem
-      v-for="(projectid, index) in selectedProjects"
-      :key="projectid"
-      :index="index"
-      :projectId="projectid"></ProjectCartItem>
-    </draggable>
-    <div id="intro" v-else>
-      <p>Klicke auf ein Projekt um es auszuwählen</p>
-      <p>Oder</p>
-      <div><router-link to="/create-project">Erstelle ein Projekt</router-link></div>
+    <div>
+      <template v-if="selectedProjects.length > 0">
+        <draggable  v-model="selectedProjects">
+          <ProjectCartItem
+          v-for="(projectid, index) in selectedProjects"
+          :key="projectid"
+          :index="index"
+          :projectId="projectid"></ProjectCartItem>
+        </draggable>
+        <div class="progressbar" :style="{'max-width': progress+'%'}"></div>
+        <p v-show="progress > 80" id="success-text">Deine Wahl ist vollständig! <br> Du kannst die Projekte jetz noch neu anordnen, indem du sie an eine andere Stelle ziehst, oder du verlässt die Seite :)</p>
+
+      </template>
+
+      <div id="intro" v-else>
+        <p>Klicke auf ein Projekt um es auszuwählen</p>
+        <p>Oder</p>
+        <router-link to="/create-project">Erstelle ein Projekt</router-link>
+      </div>
+
     </div>
   </div>
 </template>
 
 <style lang="sass">
 
+.progressbar
+  height: 10px
+  max-width: 0px
+  background: var(--color4)
+  transition: max-width .2s ease
+  animation: fullsize .2s
+
+@keyframes fullsize
+  from
+    width: 0%
+  to
+    width: 100%
+
+#success-text
+  animation: fadein 1s
+
+@keyframes fadein
+    from
+      opacity: 0
+    to
+      opacity: 1
+
 #intro
   text-align: center
 
   :nth-child(1)
     color: var(--color4)
-
-  div a
+  :nth-child(2)
+    margin-bottom: 2em
+  a
     background: var(--color4)
     border: 0
     border-radius: 1em
@@ -38,7 +70,6 @@
   min-height: 100%
   background: var(--color1)
   width: 30vw
-  &.open
   >div
     box-sizing: border-box
     position: sticky
@@ -53,10 +84,10 @@
 </style>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import ProjectCartItem from '@/components/ProjectCartItem'
+import { defineComponent, computed } from 'vue'
 import draggable from 'vuedraggable'
 import useUser from '@/compositions/useUser'
+import ProjectCartItem from '@/components/ProjectCartItem'
 
 export default defineComponent({
   components: {
@@ -65,7 +96,11 @@ export default defineComponent({
   },
   setup () {
     const { selectedProjects } = useUser()
-    return { selectedProjects }
+    const progress = computed(() => {
+      return selectedProjects.value.length / 3 * 100
+    })
+
+    return { selectedProjects, progress }
   }
 })
 </script>

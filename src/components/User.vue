@@ -14,6 +14,7 @@
   display: table-cell
   vertical-align: middle
   border-radius: .5em
+  cursor: pointer
   h2
     margin: 0
 </style>
@@ -23,7 +24,10 @@ import { defineComponent, computed } from 'vue'
 
 export default defineComponent({
   props: {
-    userId: String
+    userId: {
+      type: String,
+      required: true
+    }
   },
   setup (props) {
     const abbreviation = computed(() => {
@@ -33,6 +37,7 @@ export default defineComponent({
       if (props.userId === 'd6SQMZeRtPaFYgJJJrcZyXJpPwx1') {
         return 'hsl(100, 50%, 50%)'
       }
+
       return props.userId[1].toLowerCase().charCodeAt(0) * props.userId[5].toLowerCase().charCodeAt(0) * 0.625
     })
     return { abbreviation, backgroundColor }

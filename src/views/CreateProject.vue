@@ -84,7 +84,8 @@ export default defineComponent({
       requirements: '',
       costs: '0'
     })
-    function inputlul (el) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    function inputlul (el: any) {
       formData.description = el.target.innerHTML
     }
 
