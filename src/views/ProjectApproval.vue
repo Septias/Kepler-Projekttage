@@ -3,10 +3,7 @@
   <div style="background: var(--color1)">
     <section id="projectswrapper" v-for="project in projects" :key="project.id">
       <div>
-         <ProjectForm  :project="project"/>
-        <div>
-          <div v-if="project.visible"></div>
-        </div>
+         <ProjectForm :approval="true" :project="project"/>
       </div>
     </section>
   </div>

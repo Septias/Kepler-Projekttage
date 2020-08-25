@@ -1,6 +1,5 @@
 <template>
-
-  <form id="create-project-form" @submit.prevent="">
+  <form class="create-project-form" @submit.prevent>
     <label >Projektname</label>
     <input type="text"
       :value="project.caption"
@@ -53,12 +52,13 @@
     <label>Bedarf für das Projekt</label>
     <textarea :value="project.requirements" @input="changeProp('requirements', $event.target.value)"></textarea>
     <label>Kosten pro Schüler</label>
-    <input type="number" min="0" max="10" :value="project.costs" @input="changeProp('costs', $event.target.value)">
+    <input type="number" min="0" max="25" :value="project.costs" @input="changeProp('costs', $event.target.value)">
     <label>Projektbeschreibung</label>
     <textarea :value="project.description" @input="changeProp('description', $event.target.value)" ></textarea>
     <div class="formbuttons">
-      <button> Löschen </button>
-      <button type="submit">Speichern</button>
+      <button @click="deleteProject(project)"> Löschen </button>
+      <button v-if="approval" @click="toggleVisibility(project)"><i class="material-icons">{{project.visible ? 'visibility' : 'visibility_off'}}</i> </button>
+      <button v-else @click="createProject(project)">Speichern</button>
     </div>
   </form>
 
@@ -66,18 +66,24 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { Project } from '@/compositions/useProjects'
+import useProjects, { Project } from '@/compositions/useProjects'
 
 export default defineComponent({
   props: {
-    project: Object as unknown as PropType<Project>
+    project: Object as unknown as PropType<Project>,
+    approval: {
+      type: Boolean,
+      default: () => false
+    }
   },
   setup (props) {
+    const { createProject, toggleVisibility, deleteProject } = useProjects()
+
     function changeProp (key, value) {
       // eslint-disable-next-line vue/no-mutating-props
       props.project[key] = value
     }
-    return { changeProp }
+    return { changeProp, createProject, toggleVisibility, deleteProject }
   }
 })
 
@@ -95,7 +101,7 @@ export default defineComponent({
   &:hover
     background: var(--color1-lighten)
 
-#create-project-form
+.create-project-form
   :focus
     border: 3px solid var(--color4)
   display: flex

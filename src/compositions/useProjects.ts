@@ -25,10 +25,11 @@ export class Project {
   public costs: number
   public description: string
   public assignedUsers: Array<string>
+  public visible: boolean
   constructor (caption: string, tldr: string, description: string, id: string,
     assignedUsers: Array<string>, day1Start: string, day1End: string,
     day2Start: string, day2End: string, participantsMin: number, participantsMax: number,
-    gradeMin: number, gradeMax: number, requirements: string, costs: number) {
+    gradeMin: number, gradeMax: number, requirements: string, costs: number, visible: boolean) {
     this.caption = caption
     this.tldr = tldr
     this.description = description
@@ -44,6 +45,7 @@ export class Project {
     this.gradeMax = gradeMax
     this.requirements = requirements
     this.costs = costs
+    this.visible = visible
   }
 }
 
@@ -82,12 +84,26 @@ const postConverter = {
       data.gradeMin,
       data.gradeMax,
       data.requirements,
-      data.costs)
+      data.costs,
+      data.visible)
   }
 }
 
 function createProject (data: any) {
-  db.collection('projects').doc(String(Date.now())).set(data)
+  db.collection('projects').doc(data.caption).set({ ...data, assignedUsers: [], visible: false })
+}
+
+function toggleVisibility (project: Project) {
+  project.visible = !project.visible
+  db.collection('projects').doc(project.id).update({
+    visible: project.visible
+  })
+}
+
+function deleteProject (project: Project) {
+  // db.collection('projects').doc(project.id).delete()
+  const index = projects.value.indexOf(project)
+  projects.value.splice(index, 1)
 }
 
 let loaded = false
@@ -108,5 +124,5 @@ export default function () {
     })
     loaded = true
   }
-  return { projects, createProject }
+  return { projects, createProject, toggleVisibility, deleteProject }
 }
