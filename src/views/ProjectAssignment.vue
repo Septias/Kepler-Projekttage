@@ -11,7 +11,7 @@
     </div>
     <div id="user-cart-wrapper">
       <h2>Offene Nutzer</h2>
-      <draggable class="user-cart" group="users">
+      <draggable class="user-cart" group="users" :list="openUsers">
         <User v-for="user in openUsers" :key="user" :user-id="user"></User>
       </draggable>
     </div>
@@ -57,8 +57,8 @@ main
 </style>
 
 <script lang="ts">
-import draggable from 'vuedraggable'
-import { defineComponent, computed } from 'vue'
+import { VueDraggableNext } from 'vue-draggable-next'
+import { defineComponent, ref } from 'vue'
 import useProjects from '@/compositions/useProjects'
 import ProjectUserCart from '@/components/ProjectUserCart'
 import User from '@/components/User'
@@ -67,26 +67,24 @@ import useUsers from '@/compositions/useUsers'
 export default defineComponent({
   components: {
     ProjectUserCart,
-    draggable,
+    draggable: VueDraggableNext,
     User
   },
   async setup () {
     const { projects } = await useProjects()
     const { users } = await useUsers()
 
-    const openUsers = computed(() => {
-      const unassignedUser = [...users.value]
-      for (const project of projects.value) {
-        for (const user of project.assignedUsers) {
-          const index = unassignedUser.indexOf(user)
-          if (index > -1) {
-            unassignedUser.splice(index, 1)
-          }
+    const unassignedUser = [...users.value]
+    for (const project of projects.value) {
+      for (const user of project.assignedUsers) {
+        const index = unassignedUser.indexOf(user)
+        if (index > -1) {
+          unassignedUser.splice(index, 1)
         }
       }
-      return unassignedUser
-    })
+    }
 
+    const openUsers = ref(unassignedUser)
     return { projects, openUsers }
   }
 })

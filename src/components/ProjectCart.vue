@@ -1,18 +1,21 @@
-
 <template>
   <div id="project-cart">
     <div>
       <template v-if="selectedProjects.length > 0">
-        <draggable  v-model="selectedProjects">
+        <draggable :list="selectedProjects">
           <ProjectCartItem
-          v-for="(projectid, index) in selectedProjects"
-          :key="projectid"
-          :index="index"
-          :projectId="projectid"></ProjectCartItem>
+            v-for="(projectid, index) in selectedProjects"
+            :key="projectid"
+            :index="index"
+            :projectId="projectid"
+          ></ProjectCartItem>
         </draggable>
-        <div class="progressbar" :style="{'max-width': progress+'%'}"></div>
-        <p v-show="progress > 80" id="success-text">Deine Wahl ist vollständig! <br> Du kannst die Projekte jetz noch neu anordnen, indem du sie an eine andere Stelle ziehst, oder du verlässt die Seite :)</p>
-
+        <div class="progressbar" :style="{ 'max-width': progress + '%' }"></div>
+        <p v-show="progress > 80" id="success-text">
+          Deine Wahl ist vollständig! <br />
+          Du kannst die Projekte jetzt noch neu anordnen, indem du sie an eine
+          andere Stelle ziehst, oder du verlässt die Seite :)
+        </p>
       </template>
 
       <div id="intro" v-else>
@@ -20,7 +23,6 @@
         <p>Oder</p>
         <router-link to="/create-project">Erstelle ein Projekt</router-link>
       </div>
-
     </div>
   </div>
 </template>
@@ -80,26 +82,24 @@
   #project-cart
     min-width: 20vw
     width: auto
-
 </style>
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import draggable from 'vuedraggable'
+import { VueDraggableNext } from 'vue-draggable-next'
 import useUser from '@/compositions/useUser'
 import ProjectCartItem from '@/components/ProjectCartItem'
 
 export default defineComponent({
   components: {
-    draggable,
+    draggable: VueDraggableNext,
     ProjectCartItem
   },
   setup () {
     const { selectedProjects } = useUser()
     const progress = computed(() => {
-      return selectedProjects.value.length / 3 * 100
+      return Math.min(selectedProjects.value.length / 3, 1) * 100
     })
-
     return { selectedProjects, progress }
   }
 })

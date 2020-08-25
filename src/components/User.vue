@@ -34,7 +34,7 @@ export default defineComponent({
       return props.userId[1] + props.userId[5]
     })
     const backgroundColor = computed(() => {
-      if (props.userId === 'd6SQMZeRtPaFYgJJJrcZyXJpPwx1') {
+      if (props.userId === 'nj5jKjId3Bajv1IgOVXFvACbXaM2') {
         return 'hsl(100, 50%, 50%)'
       }
 

@@ -3,7 +3,7 @@
   <div class="project-user-cart">
     <h3>{{project.caption}}</h3>
 
-    <draggable group="users">
+    <draggable group="users" :list="project.assignedUsers">
       <User v-for="user in project.assignedUsers" :key="user" :user-id="user"></User>
     </draggable>
 
@@ -32,12 +32,12 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import { Project } from '@/compositions/useProjects'
-import draggable from 'vuedraggable'
+import { VueDraggableNext } from 'vue-draggable-next'
 import User from '@/components/User'
 
 export default defineComponent({
   components: {
-    draggable,
+    draggable: VueDraggableNext,
     User
   },
   props: {

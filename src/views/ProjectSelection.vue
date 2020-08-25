@@ -1,20 +1,22 @@
-
 <template>
   <main>
     <div id="projects-wrapper">
       <h1>Projektwahl</h1>
       <Project
-      v-for="project in projects"
-      :key="project.caption"
-      :selected="selectedProjects.includes(project.id)"
-      :project="project"
-      @click="() => {toggleProject(project.id)}"
+        v-for="project in projects"
+        :key="project.caption"
+        :selected="selectedProjects.includes(project.id)"
+        :project="project"
+        @click="
+          () => {
+            toggleProject(project.id);
+          }
+        "
       >
       </Project>
     </div>
     <ProjectCart></ProjectCart>
   </main>
-
 </template>
 
 <style lang="sass" scoped>
@@ -38,7 +40,6 @@ main
     > h1
       justify-self: left
       font-size: 3em
-
 </style>
 
 <script>
@@ -60,5 +61,4 @@ export default defineComponent({
     return { toggleProject, selectedProjects, projects }
   }
 })
-
 </script>
