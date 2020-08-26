@@ -3,6 +3,7 @@ import firebase from 'firebase/app'
 import './firebaseApp'
 import 'firebase/auth'
 import 'firebase/firestore'
+import router from '@/router'
 
 const db = firebase.firestore()
 const selectedProjects = ref<Array<string>>([])
@@ -15,13 +16,18 @@ firebase.auth().onAuthStateChanged(function (user: any) {
       if (doc.exists) {
         selectedProjects.value = doc.data().selectedProjects
       } else {
-        console.error('No UserData for user ', user.uid)
+        console.log('Creating user', user.uid)
+        db.collection('users').doc(user.uid).set({
+          selectedProjects: [],
+          project: null
+        })
       }
     })
   } else {
-    console.log('no User')
+    console.log('No active User - redirecting to login page')
     userId = undefined
     selectedProjects.value = []
+    router.push('/login')
   }
 })
 
