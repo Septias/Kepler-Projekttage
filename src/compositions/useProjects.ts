@@ -1,4 +1,4 @@
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, computed } from 'vue'
 import firebase from 'firebase/app'
 import '../compositions/firebaseApp'
 import 'firebase/auth'
@@ -49,7 +49,7 @@ export class Project {
   }
 }
 
-const projects = ref<Array<Project>>([])
+const allProjects = ref<Array<Project>>([])
 
 const firestoreSync = {
   set: function (obj: any, prop: any, value: any) {
@@ -102,11 +102,15 @@ function toggleVisibility (project: Project) {
 
 function deleteProject (project: Project) {
   // db.collection('projects').doc(project.id).delete()
-  const index = projects.value.indexOf(project)
-  projects.value.splice(index, 1)
+  const index = allProjects.value.indexOf(project)
+  allProjects.value.splice(index, 1)
 }
 
 let loaded = false
+
+const projects = computed(() => {
+  return allProjects.value.filter(proj => proj.visible)
+})
 
 export default function () {
   if (!loaded) {
@@ -119,10 +123,10 @@ export default function () {
             assignedUsers: users
           })
         }, { deep: true })
-        projects.value.push(project)
+        allProjects.value.push(project)
       })
     })
     loaded = true
   }
-  return { projects, createProject, toggleVisibility, deleteProject }
+  return { projects, createProject, toggleVisibility, deleteProject, allProjects }
 }

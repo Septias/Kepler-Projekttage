@@ -30,7 +30,7 @@
 </style>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 import useProjects from '@/compositions/useProjects'
 import ProjectForm from '@/components/ProjectForm'
 
@@ -39,8 +39,12 @@ export default defineComponent({
     ProjectForm
   },
   setup () {
-    const { projects } = useProjects()
-    return { projects }
+    const { allProjects } = useProjects()
+    const ordereProjects = computed(() => {
+      return allProjects.value.sort((a, b) => a.visible < b.visible ? -1 : 0)
+    })
+
+    return { projects: ordereProjects }
   }
 })
 </script>
