@@ -51,14 +51,6 @@ export class Project {
 
 const allProjects = ref<Array<Project>>([])
 
-const firestoreSync = {
-  set: function (obj: any, prop: any, value: any) {
-    console.log('ge')
-    obj[prop] = 'gay'
-    return true
-  }
-}
-
 const postConverter = {
   toFirestore: function (project: Project) {
     return {

@@ -44,14 +44,22 @@ function toggleProject (projectId: string) {
   }
 }
 
+function associateProject (projectid: string) {
+  db.collection('users').doc(uid).update({
+    project: projectid,
+    selectedProjects: []
+  })
+  selectedProjects.value = []
+}
+
 watch(selectedProjects, () => {
-  if (userId) {
-    db.collection('users').doc(userId).update({
+  if (uid) {
+    db.collection('users').doc(uid).update({
       selectedProjects: selectedProjects.value
     })
   }
 }, { deep: true })
 
 export default function () {
-  return { selectedProjects, toggleProject }
+  return { selectedProjects, toggleProject, associateProject }
 }

@@ -1,12 +1,13 @@
 <template>
-  <form class="create-project-form" @submit.prevent>
+  <form class="create-project-form" @submit.prevent="onSubmit">
     <label >Projektname</label>
     <input type="text"
       :value="project.caption"
       @input="changeProp('caption', $event.target.value)"
+      required
     >
     <label>Kurzbeschreibung für das Projekt</label>
-    <textarea :value="project.tldr" @input="changeProp('tldr', $event.target.value)" />
+    <textarea :value="project.tldr" @input="changeProp('tldr', $event.target.value)" required />
 
     <label>Teilnehmer</label>
     <section class="form-group">
@@ -58,7 +59,7 @@
     <div class="formbuttons">
       <button @click="deleteProject(project)"> Löschen </button>
       <button v-if="approval" @click="toggleVisibility(project)"><i class="material-icons">{{project.visible ? 'visibility' : 'visibility_off'}}</i> </button>
-      <button v-else @click="createProject(project)">Speichern</button>
+      <button type="submit">Speichern</button>
     </div>
   </form>
 
@@ -67,6 +68,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import useProjects, { Project } from '@/compositions/useProjects'
+import useUser from '@/compositions/useUser'
 
 export default defineComponent({
   props: {
@@ -78,12 +80,18 @@ export default defineComponent({
   },
   setup (props) {
     const { createProject, toggleVisibility, deleteProject } = useProjects()
-
+    const { associateProject } = useUser()
     function changeProp (key, value) {
       // eslint-disable-next-line vue/no-mutating-props
       props.project[key] = value
     }
-    return { changeProp, createProject, toggleVisibility, deleteProject }
+    function onSubmit () {
+      if (!props.approval) {
+        createProject({ ...props.project })
+        associateProject(props.project)
+      }
+    }
+    return { changeProp, createProject, toggleVisibility, deleteProject, onSubmit }
   }
 })
 
