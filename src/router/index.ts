@@ -4,8 +4,7 @@ import ProjectAssignment from '../views/ProjectAssignment.vue'
 import CreateProject from '../views/CreateProject.vue'
 import ProjectApproval from '../views/ProjectApproval.vue'
 import Login from '../views/Login.vue'
-import firebase from 'firebase/app'
-import 'firebase/auth'
+import { auth } from '../compositions/useUser'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -43,16 +42,18 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  const loggedIn = true // firebase.auth().currentUser
-  console.log(firebase.auth().currentUser)
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!loggedIn) {
+    try {
+      const user = await auth as {uid: string; project: string | undefined }
+      if (user.project) {
+        next('/project/' + user.uid)
+      }
+      next()
+    } catch (error) {
       next({
         path: '/login',
         query: { next: to.path }
       })
-    } else {
-      next()
     }
   } else {
     next()
