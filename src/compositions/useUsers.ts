@@ -13,9 +13,10 @@ export default function () {
     return new Promise((resolve) => {
       db.collection('users').get().then(function (querySnapshot: firebase.firestore.QuerySnapshot) {
         querySnapshot.forEach(function (doc) {
-          users.value.push(doc.data().uid as unknown as string)
+          users.value.push(doc.id)
         })
-        resolve(users)
+        console.log(users)
+        resolve({ users })
       })
     })
   } else {
