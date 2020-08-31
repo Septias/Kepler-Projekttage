@@ -11,16 +11,25 @@ type QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot
 
 const timeouts: { [key: string ]: number } = {}
 
+const delayedFields = ['caption', 'tldr', 'description']
 const firestoreSyncHandle = {
   set: (project: Project, prop: string, val: any) => {
-    clearTimeout(timeouts[prop])
-    timeouts[prop] = setTimeout(() => {
+    if (delayedFields.includes(prop)) {
+      clearTimeout(timeouts[prop])
+      timeouts[prop] = setTimeout(() => {
+        db.collection('projects').doc(project.id).update({
+          [prop]: val
+        }).catch(() => {
+          console.error(`Problem syncing Firstore for ${project.id} with prop: ${prop} and val ${val}`)
+        })
+      }, 2000)
+    } else {
       db.collection('projects').doc(project.id).update({
         [prop]: val
       }).catch(() => {
         console.error(`Problem syncing Firstore for ${project.id} with prop: ${prop} and val ${val}`)
       })
-    }, 2000)
+    }
     return Reflect.set(project, prop, val)
   }
 }
