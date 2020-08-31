@@ -4,7 +4,8 @@ import ProjectAssignment from '../views/ProjectAssignment.vue'
 import CreateProject from '../views/CreateProject.vue'
 import ProjectApproval from '../views/ProjectApproval.vue'
 import Login from '../views/Login.vue'
-import { auth } from '../compositions/useUser'
+import { user } from '../compositions/useUser'
+import Project from '../views/Project.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -32,6 +33,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/approve-projects',
     component: ProjectApproval
+  },
+  {
+    path: '/project/:id',
+    component: Project
   }
 
 ]
@@ -44,16 +49,26 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     try {
-      const user = await auth as {uid: string; project: string | undefined }
-      if (user.project) {
-        next('/project/' + user.uid)
-      }
+      const _user = await user as {uid: string; project: string | undefined }
       next()
     } catch (error) {
       next({
         path: '/login',
         query: { next: to.path }
       })
+    }
+  } else {
+    next()
+  }
+})
+
+router.beforeEach(async (to, from, next) => {
+  if (to.path === '/') {
+    const _user = await user as {uid: string; project: string | undefined }
+    if (_user.project) {
+      next('/project/' + _user.project)
+    } else {
+      next()
     }
   } else {
     next()
