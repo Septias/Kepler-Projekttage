@@ -3,6 +3,7 @@ import firebase from 'firebase/app'
 import '../compositions/firebaseApp'
 import 'firebase/auth'
 import 'firebase/firestore'
+import { idFromCaption } from '../helpers'
 
 const db = firebase.firestore()
 
@@ -117,7 +118,7 @@ const postConverter = {
 }
 
 function createProject (data: any) {
-  db.collection('projects').doc(data.caption).set({ ...data, assignedUsers: [], visible: false })
+  db.collection('projects').doc(idFromCaption(data.caption)).set({ ...data, assignedUsers: [], visible: false })
 }
 
 function toggleVisibility (project: Project) {

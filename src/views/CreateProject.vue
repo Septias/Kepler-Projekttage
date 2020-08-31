@@ -12,6 +12,7 @@ import { defineComponent, reactive } from 'vue'
 import useProjects from '@/compositions/useProjects'
 import ProjectForm from '@/components/ProjectForm'
 import useUser from '@/compositions/useUser'
+import { idFromCaption } from '../helpers'
 
 export default defineComponent({
   components: {
@@ -38,8 +39,8 @@ export default defineComponent({
     })
 
     function onSubmit () {
-      associateProject(project)
       createProject(project)
+      associateProject(idFromCaption(project.caption))
     }
     return { project, onSubmit }
   }
