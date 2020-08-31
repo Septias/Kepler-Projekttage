@@ -9,7 +9,7 @@ const db = firebase.firestore()
 const selectedProjects = ref<Array<string>>([])
 let uid: string
 
-export const auth = new Promise((resolve, reject) => {
+export const user = new Promise((resolve, reject) => {
   firebase.auth().onAuthStateChanged(function (user: any) {
     if (user) {
       uid = user.uid
@@ -18,7 +18,6 @@ export const auth = new Promise((resolve, reject) => {
           selectedProjects.value = doc.data().selectedProjects
           resolve(doc.data())
         } else {
-          console.log('Creating user', user.uid)
           db.collection('users').doc(user.uid).set({
             selectedProjects: [],
             project: null
