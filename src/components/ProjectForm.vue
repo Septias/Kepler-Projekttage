@@ -1,5 +1,5 @@
 <template>
-  <form class="create-project-form" @submit.prevent="onSubmit">
+  <form class="create-project-form" >
     <label >Projektname</label>
     <input type="text"
       :value="project.caption"
@@ -57,8 +57,8 @@
     <label>Projektbeschreibung</label>
     <textarea :value="project.description" @input="changeProp('description', $event.target.value)" ></textarea>
     <div class="formbuttons">
-      <button @click="deleteProject(project)"> Löschen </button>
-      <button v-if="approval" @click="toggleVisibility(project)"><i class="material-icons">{{project.visible ? 'visibility' : 'visibility_off'}}</i> </button>
+      <button @click="deleteProject(project)" type="button"> Löschen </button>
+      <button v-if="approval" type="button" @click="toggleVisibility(project)"><i class="material-icons">{{project.visible ? 'visibility' : 'visibility_off'}}</i> </button>
       <button v-else type="submit">Speichern</button>
     </div>
   </form>
@@ -68,7 +68,6 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import useProjects, { Project } from '@/compositions/useProjects'
-import useUser from '@/compositions/useUser'
 
 export default defineComponent({
   props: {
@@ -80,18 +79,11 @@ export default defineComponent({
   },
   setup (props) {
     const { createProject, toggleVisibility, deleteProject } = useProjects()
-    const { associateProject } = useUser()
     function changeProp (key, value) {
       // eslint-disable-next-line vue/no-mutating-props
       props.project[key] = value
     }
-    function onSubmit () {
-      if (!props.approval) {
-        associateProject(props.project)
-        createProject({ ...props.project })
-      }
-    }
-    return { changeProp, createProject, toggleVisibility, deleteProject, onSubmit }
+    return { changeProp, createProject, toggleVisibility, deleteProject }
   }
 })
 

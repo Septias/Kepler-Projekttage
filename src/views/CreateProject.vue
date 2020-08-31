@@ -2,7 +2,7 @@
   <div id="wrapper" class="flex align-center justify-center">
     <div id="create-project">
       <h1> Erstelle ein Projekt</h1>
-      <ProjectForm v-model:project="project" @submit.prevent="createProject(project)" />
+      <ProjectForm v-model:project="project" @submit.prevent="onSubmit" />
     </div>
   </div>
 </template>
@@ -11,6 +11,7 @@
 import { defineComponent, reactive } from 'vue'
 import useProjects from '@/compositions/useProjects'
 import ProjectForm from '@/components/ProjectForm'
+import useUser from '@/compositions/useUser'
 
 export default defineComponent({
   components: {
@@ -18,6 +19,7 @@ export default defineComponent({
   },
   setup () {
     const { createProject } = useProjects()
+    const { associateProject } = useUser()
 
     const project = reactive({
       caption: '',
@@ -34,7 +36,12 @@ export default defineComponent({
       requirements: '',
       costs: '0'
     })
-    return { project, createProject }
+
+    function onSubmit () {
+      associateProject(project)
+      createProject(project)
+    }
+    return { project, onSubmit }
   }
 })
 
