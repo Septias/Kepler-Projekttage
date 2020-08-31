@@ -59,7 +59,17 @@ export class Project {
     this.tldr = tldr
     this.description = description
     this.id = id
-    this.assignedUsers = assignedUsers
+    this.assignedUsers = new Proxy(assignedUsers, {
+      set: function (arr: string[], prop: string | number | symbol, val: any) {
+        const ref = Reflect.set(arr, prop, val)
+        if (prop === 'length') {
+          db.collection('projects').doc(id).update({
+            assignedUsers: arr
+          })
+        }
+        return ref
+      }
+    })
     this.day1Start = day1Start
     this.day1End = day1End
     this.day2Start = day2Start

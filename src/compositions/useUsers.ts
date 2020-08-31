@@ -15,7 +15,6 @@ export default function () {
         querySnapshot.forEach(function (doc) {
           users.value.push(doc.id)
         })
-        console.log(users)
         resolve({ users })
       })
     })
