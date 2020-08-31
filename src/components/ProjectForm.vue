@@ -59,7 +59,7 @@
     <div class="formbuttons">
       <button @click="deleteProject(project)"> Löschen </button>
       <button v-if="approval" @click="toggleVisibility(project)"><i class="material-icons">{{project.visible ? 'visibility' : 'visibility_off'}}</i> </button>
-      <button type="submit">Speichern</button>
+      <button v-else type="submit">Speichern</button>
     </div>
   </form>
 
@@ -87,8 +87,8 @@ export default defineComponent({
     }
     function onSubmit () {
       if (!props.approval) {
-        createProject({ ...props.project })
         associateProject(props.project)
+        createProject({ ...props.project })
       }
     }
     return { changeProp, createProject, toggleVisibility, deleteProject, onSubmit }

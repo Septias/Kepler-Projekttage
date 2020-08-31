@@ -9,6 +9,22 @@ const db = firebase.firestore()
 type DocumentReference = firebase.firestore.DocumentReference
 type QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot
 
+const timeouts: { [key: string ]: number } = {}
+
+const firestoreSyncHandle = {
+  set: (project: Project, prop: string, val: any) => {
+    clearTimeout(timeouts[prop])
+    timeouts[prop] = setTimeout(() => {
+      db.collection('projects').doc(project.id).update({
+        [prop]: val
+      }).catch(() => {
+        console.error(`Problem syncing Firstore for ${project.id} with prop: ${prop} and val ${val}`)
+      })
+    }, 2000)
+    return Reflect.set(project, prop, val)
+  }
+}
+
 export class Project {
   public id: string
   public caption: string
@@ -24,8 +40,8 @@ export class Project {
   public requirements: string
   public costs: number
   public description: string
-  public assignedUsers: Array<string>
   public visible: boolean
+  assignedUsers: object
   constructor (caption: string, tldr: string, description: string, id: string,
     assignedUsers: Array<string>, day1Start: string, day1End: string,
     day2Start: string, day2End: string, participantsMin: number, participantsMax: number,
@@ -61,7 +77,7 @@ const postConverter = {
   },
   fromFirestore: function (snapshot: QueryDocumentSnapshot, options: firebase.firestore.SnapshotOptions) {
     const data = snapshot.data(options)
-    return new Project(
+    return new Proxy(new Project(
       data.caption,
       data.tldr,
       data.description,
@@ -77,7 +93,7 @@ const postConverter = {
       data.gradeMax,
       data.requirements,
       data.costs,
-      data.visible)
+      data.visible), firestoreSyncHandle)
   }
 }
 
@@ -87,34 +103,24 @@ function createProject (data: any) {
 
 function toggleVisibility (project: Project) {
   project.visible = !project.visible
-  db.collection('projects').doc(project.id).update({
-    visible: project.visible
-  })
 }
 
 function deleteProject (project: Project) {
-  // db.collection('projects').doc(project.id).delete()
+  db.collection('projects').doc(project.id).delete()
   const index = allProjects.value.indexOf(project)
   allProjects.value.splice(index, 1)
 }
-
-let loaded = false
 
 const projects = computed(() => {
   return allProjects.value.filter(proj => proj.visible)
 })
 
+let loaded = false
 export default function () {
   if (!loaded) {
     db.collection('projects').withConverter(postConverter).get().then(function (querySnapshot: firebase.firestore.QuerySnapshot) {
       querySnapshot.forEach(function (doc) {
         const project = reactive(doc.data() as Project)
-
-        watch(() => project.assignedUsers, (users) => {
-          db.collection('projects').doc(project.id).update({
-            assignedUsers: users
-          })
-        }, { deep: true })
         allProjects.value.push(project)
       })
     })
