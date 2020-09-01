@@ -13,6 +13,8 @@ import useProjects from '@/compositions/useProjects'
 import ProjectForm from '@/components/ProjectForm'
 import useUser from '@/compositions/useUser'
 import { idFromCaption } from '../helpers'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 
 export default defineComponent({
   components: {
@@ -35,7 +37,8 @@ export default defineComponent({
       gradeMin: 5,
       gradeMax: 12,
       requirements: '',
-      costs: '0'
+      costs: '0',
+      creator: firebase.auth().currentUser.uid
     })
 
     function onSubmit () {
