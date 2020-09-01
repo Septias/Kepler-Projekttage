@@ -54,9 +54,9 @@ export default defineComponent({
     Project,
     ProjectCart
   },
-  setup () {
-    const { toggleProject, selectedProjects } = useUser()
-    const { projects } = useProjects()
+  async setup () {
+    const { toggleProject, selectedProjects } = await useUser()
+    const { projects } = await useProjects()
 
     return { toggleProject, selectedProjects, projects }
   }

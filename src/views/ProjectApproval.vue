@@ -3,7 +3,7 @@
   <div style="background: var(--color1)">
     <section id="projectswrapper" v-for="project in projects" :key="project.id">
       <div>
-         <ProjectForm :approval="true" :project="project"/>
+         <ProjectForm :approval="true" :visibilityButton="true" :deleteButton="true" :project="project"/>
       </div>
     </section>
   </div>
@@ -38,8 +38,8 @@ export default defineComponent({
   components: {
     ProjectForm
   },
-  setup () {
-    const { allProjects } = useProjects()
+  async setup () {
+    const { allProjects } = await useProjects()
     const ordereProjects = computed(() => {
       return allProjects.value.sort((a, b) => a.visible < b.visible ? -1 : 0)
     })

@@ -95,8 +95,8 @@ export default defineComponent({
     draggable: VueDraggableNext,
     ProjectCartItem
   },
-  setup () {
-    const { selectedProjects } = useUser()
+  async setup () {
+    const { selectedProjects } = await useUser()
     const progress = computed(() => {
       return Math.min(selectedProjects.value.length / 3, 1) * 100
     })

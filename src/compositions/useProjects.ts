@@ -1,4 +1,4 @@
-import { ref, reactive, watch, computed } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import firebase from 'firebase/app'
 import '../compositions/firebaseApp'
 import 'firebase/auth'
@@ -52,10 +52,11 @@ export class Project {
   public description: string
   public visible: boolean
   assignedUsers: object
+  creator: string
   constructor (caption: string, tldr: string, description: string, id: string,
     assignedUsers: Array<string>, day1Start: string, day1End: string,
     day2Start: string, day2End: string, participantsMin: number, participantsMax: number,
-    gradeMin: number, gradeMax: number, requirements: string, costs: number, visible: boolean) {
+    gradeMin: number, gradeMax: number, requirements: string, costs: number, visible: boolean, creator: string) {
     this.caption = caption
     this.tldr = tldr
     this.description = description
@@ -82,6 +83,7 @@ export class Project {
     this.requirements = requirements
     this.costs = costs
     this.visible = visible
+    this.creator = creator
   }
 }
 
@@ -113,12 +115,29 @@ const postConverter = {
       data.gradeMax,
       data.requirements,
       data.costs,
-      data.visible), firestoreSyncHandle)
+      data.visible, data.creator), firestoreSyncHandle)
   }
 }
 
-function createProject (data: any) {
-  db.collection('projects').doc(idFromCaption(data.caption)).set({ ...data, assignedUsers: [], visible: false })
+async function createProject (data: any) {
+  await db.collection('projects').doc(idFromCaption(data.caption)).set({ ...data, assignedUsers: [], visible: false })
+  allProjects.value.push(reactive(new Proxy(new Project(
+    data.caption,
+    data.tldr,
+    data.description,
+    idFromCaption(data.caption),
+    [],
+    data.day1Start,
+    data.day1End,
+    data.day2Start,
+    data.day2End,
+    data.participantsMin,
+    data.participantsMax,
+    data.gradeMin,
+    data.gradeMax,
+    data.requirements,
+    data.costs,
+    false, data.creator), firestoreSyncHandle)))
 }
 
 function toggleVisibility (project: Project) {
@@ -135,16 +154,20 @@ const projects = computed(() => {
   return allProjects.value.filter(proj => proj.visible)
 })
 
-let loaded = false
-export default function () {
-  if (!loaded) {
-    db.collection('projects').withConverter(postConverter).get().then(function (querySnapshot: firebase.firestore.QuerySnapshot) {
+function getOrFetch () {
+  if (allProjects.value.length === 0) {
+    return db.collection('projects').withConverter(postConverter).get().then(function (querySnapshot: firebase.firestore.QuerySnapshot) {
       querySnapshot.forEach(function (doc) {
         const project = reactive(doc.data() as Project)
         allProjects.value.push(project)
       })
     })
-    loaded = true
+  } else {
+    return Promise.resolve(allProjects)
   }
+}
+
+export default async function () {
+  await getOrFetch()
   return { projects, createProject, toggleVisibility, deleteProject, allProjects }
 }

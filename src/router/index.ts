@@ -4,7 +4,6 @@ import ProjectAssignment from '../views/ProjectAssignment.vue'
 import CreateProject from '../views/CreateProject.vue'
 import ProjectApproval from '../views/ProjectApproval.vue'
 import Login from '../views/Login.vue'
-import { user } from '../compositions/useUser'
 import Project from '../views/Project.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -24,7 +23,10 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/assign-projects',
-    component: ProjectAssignment
+    component: ProjectAssignment,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/login',
@@ -32,13 +34,16 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/approve-projects',
-    component: ProjectApproval
+    component: ProjectApproval,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
-    path: '/project/:id',
+    path: '/project/:projectid',
+    props: true,
     component: Project
   }
-
 ]
 
 const router = createRouter({
@@ -49,7 +54,7 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     try {
-      const _user = await user as {uid: string; project: string | undefined }
+      await require('../compositions/useUser')
       next()
     } catch (error) {
       next({
@@ -64,9 +69,10 @@ router.beforeEach(async (to, from, next) => {
 
 router.beforeEach(async (to, from, next) => {
   if (to.path === '/') {
-    const _user = await user as {uid: string; project: string | undefined }
-    if (_user.project) {
-      next('/project/' + _user.project)
+    const { authPromise } = await require('../compositions/useUser')
+    const user = await authPromise
+    if (user.value.project) {
+      next('/project/' + user.value.project)
     } else {
       next()
     }

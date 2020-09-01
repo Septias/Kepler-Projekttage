@@ -57,33 +57,47 @@
     <label>Projektbeschreibung</label>
     <textarea :value="project.description" @input="changeProp('description', $event.target.value)" ></textarea>
     <div class="formbuttons">
-      <button @click="deleteProject(project)" type="button"> Löschen </button>
-      <button v-if="approval" type="button" @click="toggleVisibility(project)"><i class="material-icons">{{project.visible ? 'visibility' : 'visibility_off'}}</i> </button>
-      <button v-else type="submit">Speichern</button>
+      <button v-if="deleteButton" @click="deleteClick(project)" type="button"> Löschen </button>
+      <button v-if="visibilityButton" type="button" @click="toggleVisibility(project)"><i class="material-icons">{{project.visible ? 'visibility' : 'visibility_off'}}</i> </button>
+      <button v-if="createButton" type="submit">Speichern</button>
     </div>
   </form>
-
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import useProjects, { Project } from '@/compositions/useProjects'
+import useUser from '@/compositions/useUser'
 
 export default defineComponent({
   props: {
     project: Object as unknown as PropType<Project>,
-    approval: {
+    visibilityButton: {
+      type: Boolean,
+      default: () => false
+    },
+    deleteButton: {
+      type: Boolean,
+      default: () => false
+    },
+    createButton: {
       type: Boolean,
       default: () => false
     }
   },
-  setup (props) {
-    const { createProject, toggleVisibility, deleteProject } = useProjects()
+  async setup (props, context) {
+    const { createProject, toggleVisibility, deleteProject } = await useProjects()
+    const { removeProject } = await useUser()
     function changeProp (key, value) {
       // eslint-disable-next-line vue/no-mutating-props
       props.project[key] = value
     }
-    return { changeProp, createProject, toggleVisibility, deleteProject }
+    async function deleteClick (project) {
+      context.emit('deleted')
+      deleteProject(project)
+      removeProject()
+    }
+    return { changeProp, createProject, toggleVisibility, deleteClick }
   }
 })
 

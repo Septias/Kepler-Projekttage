@@ -58,8 +58,8 @@ export default defineComponent({
     index: Number,
     projectId: String
   },
-  setup (props) {
-    const { projects } = useProjects()
+  async setup (props) {
+    const { projects } = await useProjects()
     const caption = computed(() => {
       const obj = projects.value.find(proj => proj.id === props.projectId)
       if (obj) {

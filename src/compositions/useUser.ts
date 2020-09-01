@@ -3,31 +3,32 @@ import firebase from 'firebase/app'
 import './firebaseApp'
 import 'firebase/auth'
 import 'firebase/firestore'
-import router from '@/router'
 
 const db = firebase.firestore()
 const selectedProjects = ref<Array<string>>([])
-let uid: string
+const user = ref()
+type DocumentSnapshot = firebase.firestore.DocumentSnapshot
 
-export const user = new Promise((resolve, reject) => {
-  firebase.auth().onAuthStateChanged(function (user: any) {
-    if (user) {
-      uid = user.uid
-      db.collection('users').doc(user.uid).get().then(function (doc: any) {
+export const authPromise = new Promise((resolve, reject) => {
+  firebase.auth().onAuthStateChanged(function (authUser: any) {
+    if (authUser) {
+      db.collection('users').doc(authUser.uid).get().then(function (doc: DocumentSnapshot) {
         if (doc.exists) {
-          selectedProjects.value = doc.data().selectedProjects
-          resolve(doc.data())
+          user.value = doc.data()
+          user.value.uid = doc.id
+          selectedProjects.value = user.value.selectedProjects
+          resolve(user)
         } else {
-          db.collection('users').doc(user.uid).set({
+          db.collection('users').doc(authUser.uid).set({
             selectedProjects: [],
             project: null
           })
+          user.value = { project: null, selectedProjects: null }
+          resolve(user)
         }
       })
     } else {
-      console.log('No active User - redirecting to login page')
       selectedProjects.value = []
-      router.push('/login')
       reject(new Error('No logged in User'))
     }
   })
@@ -44,7 +45,7 @@ function toggleProject (projectId: string) {
 }
 
 function associateProject (projectid: string) {
-  db.collection('users').doc(uid).update({
+  db.collection('users').doc(user.value.uid).update({
     project: projectid,
     selectedProjects: []
   })
@@ -52,13 +53,20 @@ function associateProject (projectid: string) {
 }
 
 watch(selectedProjects, () => {
-  if (uid) {
-    db.collection('users').doc(uid).update({
+  if (user.value) {
+    db.collection('users').doc(user.value.uid).update({
       selectedProjects: selectedProjects.value
     })
   }
 }, { deep: true })
 
-export default function () {
-  return { selectedProjects, toggleProject, associateProject }
+function removeProject () {
+  db.collection('users').doc(user.value.uid).update({
+    project: null
+  })
+}
+
+export default async function () {
+  await authPromise
+  return { user, selectedProjects, toggleProject, associateProject, removeProject }
 }

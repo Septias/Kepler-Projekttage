@@ -2,7 +2,7 @@
   <div id="wrapper" class="flex align-center justify-center">
     <div id="create-project">
       <h1> Erstelle ein Projekt</h1>
-      <ProjectForm v-model:project="project" @submit.prevent="onSubmit" />
+      <ProjectForm v-model:project="project" :createButton="true" @submit.prevent="onSubmit" />
     </div>
   </div>
 </template>
@@ -15,14 +15,15 @@ import useUser from '@/compositions/useUser'
 import { idFromCaption } from '../helpers'
 import firebase from 'firebase/app'
 import 'firebase/auth'
+import router from '@/router'
 
 export default defineComponent({
   components: {
     ProjectForm
   },
-  setup () {
-    const { createProject } = useProjects()
-    const { associateProject } = useUser()
+  async setup () {
+    const { createProject } = await useProjects()
+    const { associateProject } = await useUser()
 
     const project = reactive({
       caption: '',
@@ -41,9 +42,11 @@ export default defineComponent({
       creator: firebase.auth().currentUser.uid
     })
 
-    function onSubmit () {
-      createProject(project)
-      associateProject(idFromCaption(project.caption))
+    async function onSubmit () {
+      const id = idFromCaption(project.caption)
+      await createProject(project)
+      router.push('/project/' + id)
+      associateProject(id)
     }
     return { project, onSubmit }
   }
