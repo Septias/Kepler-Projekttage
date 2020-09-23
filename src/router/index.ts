@@ -5,6 +5,7 @@ import CreateProject from '../views/CreateProject.vue'
 import ProjectApproval from '../views/ProjectApproval.vue'
 import Login from '../views/Login.vue'
 import Project from '../views/Project.vue'
+import { auth } from 'firebase'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -54,7 +55,8 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     try {
-      await require('../compositions/useUser')
+      const {authPromise} = await require('../compositions/useUser')
+      await authPromise
       next()
     } catch (error) {
       next({
