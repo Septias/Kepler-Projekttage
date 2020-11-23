@@ -55,7 +55,7 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     try {
-      const {authPromise} = await require('../compositions/useUser')
+      const { authPromise } = await require('../compositions/useUser')
       await authPromise
       next()
     } catch (error) {
