@@ -1,5 +1,5 @@
 
-# Project-days
+# Kepler-Projekttage
 This website is used to organize the project days from my old school.
  
 ## Features
